@@ -1,6 +1,56 @@
 \usepackage[]{algorithm}
 \usepackage{algpseudocode}[noend]
 
+\documentclass[a4paper, norsk] {article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc,url} \urlstyle{sf}
+\usepackage{babel, textcomp}
+\usepackage{graphicx}
+\usepackage{parskip}
+
+% Math
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+%tikz
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric}
+
+% MATLAB
+\usepackage{listings}
+\lstset{language=MATLAB}
+\usepackage{color}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{
+  language=python,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{dkgreen},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
+}
+
+\title{MAT1120 Obligatorisk oppgave 1}
+\author{Kristin Eng}
+\date{September 2020}
+
+\begin{document}
+
+\maketitle
+
+
 \begin{algorithm}
 \label{ag:snn2}
 \caption{Algorithm used to find shared nearest neighbor graph, using compressed rows format}
@@ -29,3 +79,7 @@
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
+
+
+
+\end{document}
