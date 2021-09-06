@@ -1,12 +1,13 @@
-\usepackage[]{algorithm}
-\usepackage{algpseudocode}[noend]
-
 \documentclass[a4paper, norsk] {article}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc,url} \urlstyle{sf}
 \usepackage{babel, textcomp}
 \usepackage{graphicx}
 \usepackage{parskip}
+
+% Pseudocode
+\usepackage[]{algorithm}
+\usepackage{algpseudocode}[noend]
 
 % Math
 \usepackage{amsmath}
@@ -42,44 +43,86 @@
   tabsize=3
 }
 
-\title{MAT1120 Obligatorisk oppgave 1}
-\author{Kristin Eng}
-\date{September 2020}
+\title{IN2010 Obligatorisk oppgave 1}
+\author{Kristin Eng, Anine Lome \& Didrik Sten Ingebrigtsen}
+\date{\today}
 
 \begin{document}
 
 \maketitle
 
-
 \begin{algorithm}
-\label{ag:snn2}
-\caption{Algorithm used to find shared nearest neighbor graph, using compressed rows format}
+\label{ag:push_back}
+\caption{Algorithm for appending an element to a linked list}
 \begin{algorithmic}[0]
-\Procedure{snn2}{row, N}
-    \State $initialise\_empty\_arrays(SNN\_val)$
-    // 1: Find triangles
-    \For{$f \in [0, N-2]_\mathbb{N}$}
-        \For{$s \in \{s > f \,|\, s \in row[f]\}$}
-            \For{$t\_candidate \in \{t\_candidate > s \,|\, t\_candidate \in row[f]\}$}
-                \If{$t\_candidate \in row[s]$}
-                    \State $t \gets t\_candidate$
-                    \State $increment(SNN\_val[index(s \in row[f])])$
-                    \State $increment(SNN\_val[index(t \in row[f])])$
-                    \State $increment(SNN\_val[index(t \in row[s])])$
-                \EndIf
-            \EndFor
-        \EndFor
-    \EndFor
-    // 2: Find reverse edges
-    \For{$from \in [0, N]_\mathbb{N}$}
-        \For{$to \in \{to < from \,|\,to \in row[from]\}$}
-            \State $SNN\_val[index(to \in row[from])] \gets SNN\_val[index(from \in row[to])]$
-        \EndFor
-    \EndFor
+\Procedure{push\_back}{list, x}
+    \State $list.back.next \gets new Node(x, prev=list.back)$
+    \State $list.back \gets list.back.next$
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
 
+\begin{algorithm}
+\label{ag:push_front}
+\caption{Algorithm for prepending an element to a linked list}
+\begin{algorithmic}[0]
+\Procedure{push\_front}{list, x}
+    \State $list.front.prev \gets new Node(x, next=list.front)$
+    \State $list.front \gets list.front.prev$
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
 
+\begin{algorithm}
+\label{ag:push_middle}
+\caption{Algorithm for inserting an element in the middle of a linked list}
+\begin{algorithmic}[0]
+\Procedure{push\_front}{list, x}
+    \If{$list.len \% 2 = 1 \quad or \quad list.left\_len < list.right\_len$}
+        \State $middle\_node \gets new Node(x)$
+        \State $middle\_node.prev \gets list.middle.prev$
+        \State $middle\_node.next \gets list.middle$
+
+        \State $list.middle.prev \gets middle\_node$
+        \State $list.middle \gets middle\_node$
+        \State $middle_node.prev.next \gets middle\_node$
+    \Else
+        \State $middle\_node \gets new Node(x)$
+        \State $middle\_node.prev \gets list.middle$
+        \State $middle\_node.next \gets list.middle.next$
+        \State $list.middle.next \gets middle\_node$
+        \State $list.middle \gets middle\_node$
+        \State $middle_node.next.prev \gets middle\_node$
+    \EndIf
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}
+\label{ag:get}
+\caption{Algorithm for getting an element with index i from a linked list}
+\begin{algorithmic}[0]
+\Procedure{get}{list, i}
+    \If{$list.left\_len \geq i$}
+        \For{$k \gets 0 \; to \; list.left\_len$}
+            \State $current = current.next$
+        \EndFor
+    \ElsIf{$1/2 \cdot list.len  \geq i$}
+        \For{$k \gets 0 \; to \; 1/2 \cdot list.len - i$}
+            \State $current = current.prev$
+        \EndFor
+    \ElsIf{$3/2 \cdot list.len  \geq i$}
+        \For{$k \gets 0 \; to \; 3/2 \cdot list.len - i$}
+            \State $current = current.next$
+        \EndFor
+    \Else
+        \For{$k \gets 0 \; to \; list.len - i$}
+            \State $current = current.prev$
+        \EndFor
+    \EndIf
+    \State \Return $current$
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
 
 \end{document}
