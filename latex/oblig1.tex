@@ -1,0 +1,31 @@
+\usepackage[]{algorithm}
+\usepackage{algpseudocode}[noend]
+
+\begin{algorithm}
+\label{ag:snn2}
+\caption{Algorithm used to find shared nearest neighbor graph, using compressed rows format}
+\begin{algorithmic}[0]
+\Procedure{snn2}{row, N}
+    \State $initialise\_empty\_arrays(SNN\_val)$
+    // 1: Find triangles
+    \For{$f \in [0, N-2]_\mathbb{N}$}
+        \For{$s \in \{s > f \,|\, s \in row[f]\}$}
+            \For{$t\_candidate \in \{t\_candidate > s \,|\, t\_candidate \in row[f]\}$}
+                \If{$t\_candidate \in row[s]$}
+                    \State $t \gets t\_candidate$
+                    \State $increment(SNN\_val[index(s \in row[f])])$
+                    \State $increment(SNN\_val[index(t \in row[f])])$
+                    \State $increment(SNN\_val[index(t \in row[s])])$
+                \EndIf
+            \EndFor
+        \EndFor
+    \EndFor
+    // 2: Find reverse edges
+    \For{$from \in [0, N]_\mathbb{N}$}
+        \For{$to \in \{to < from \,|\,to \in row[from]\}$}
+            \State $SNN\_val[index(to \in row[from])] \gets SNN\_val[index(from \in row[to])]$
+        \EndFor
+    \EndFor
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
