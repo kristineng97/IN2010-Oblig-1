@@ -1,36 +1,49 @@
+"""
+Problem 1: Teque
+"""
 
 
-#Lage klasse
 class Node:
-   def __init__(self, value):
-       self.value = value
-       self.next = None
-       self.prev = None
+    """
+    Node class used as building block for linked list
+    """
+
+    def __init__(self, value):
+        self.value = value
+        self.next = None
+        self.prev = None
+
 
 class LinkedList:
+    """
+    Class for representing a linked list, with different methods
+    """
+
     def __init__(self):
         self.head = None
 
-    # Method used for testing:
     def listprint(self):
+        """Method that prints the linked list"""
         printval = self.head
         while printval is not None:
-         print(printval.value)
-         printval = printval.next
+            print(printval.value)
+            printval = printval.next
 
     def find_length(self):
+        """Method that finds the length of linked list"""
         length = 0
         temp = self.head
-        while (temp != None):
+        while temp != None:
             length += 1
             temp = temp.next
-        #self.length = length
         return length
 
-
-    # The following methods takes in a list-object from LinkedList-class, and an integer x
     def push_back(self, x):
-        new_node = Node(value = x)
+        """Method that takes in a list-object
+        from LinkedList-class, and an integer x,
+        makes a node with value x and pushes it to the back of the list
+        """
+        new_node = Node(value=x)
         tail = self.head
         new_node.next = None
 
@@ -39,15 +52,18 @@ class LinkedList:
             self.head = new_node
             return
 
-        while (tail.next is not None):
-                tail = tail.next
+        while tail.next is not None:
+            tail = tail.next
 
         tail.next = new_node
         new_node.prev = tail
 
-
     def push_front(self, x):
-        new_node = Node(value = x)
+        """Method that takes in a list-object
+        from LinkedList-class, and an integer x,
+        makes a node with value x and pushes it to the front of the list
+        """
+        new_node = Node(value=x)
         new_node.next = self.head
         new_node.prev = None
 
@@ -57,7 +73,11 @@ class LinkedList:
         self.head = new_node
 
     def push_middle(self, x):
-        new_node = Node(value = x)
+        """Method that takes in a list-object
+        from LinkedList-class, and an integer x,
+        makes a node with value x and pushes it to the middle of the list
+        """
+        new_node = Node(value=x)
         if self.head is None:
             self.head = self.tail = new_node
             self.head.previous = None
@@ -65,9 +85,9 @@ class LinkedList:
 
         else:
             length = self.find_length()
-            mid = (length // 2) if (length % 2 == 0) else ((length + 1)//2)
+            mid = (length // 2) if (length % 2 == 0) else ((length + 1) // 2)
             current = self.head
-            for i in range(1,mid):
+            for i in range(1, mid):
                 current = current.next
 
             temp = current.next
@@ -78,58 +98,34 @@ class LinkedList:
             new_node.next = temp
             temp.previous = new_node
 
-        self.length += 1
-
-
+        length += 1
 
     def get(self, i):
+        """Method that takes in an integer i, representing an index,
+        and prints the value of the node at this given index
+        """
         count = 0
         current = self.head
-        while (count != i):
+        while count != i:
             current = current.next
-            count +=1
+            count += 1
         print(current.value)
-"""
-list1 = LinkedList()
-list1.push_back(10)
-list1.push_front(9)
-list1.push_front(7)
-list1.push_front(6)
-list1.push_middle(8)
-function, arg = input().split()
-print(getattr(list1, function)(int(arg)))
 
-list1 = LinkedList()
-list1.start = Node(10)
-e2 = Node(9)
-e3 = Node(11)
 
-list1.start.next = e3
+list1 = LinkedList()  # Make object of LinkedList class
 
-list1.start.prev = e2
-list1.listprint()
+# Lists to fill with given input, method and argument
+functions = []
+args = []
 
-list1 = LinkedList()
+print("Input:")
 
-list1.push_back(10)
-list1.push_front(9)
-list1.push_front(7)
-list1.push_front(6)
-list1.push_middle(8)
-list1.get(3)
-list1.listprint()
-"""
-list1 = LinkedList()
-list1.push_back(10)
-list1.push_front(9)
-list1.push_front(7)
+N = int(input())  # Reading first line of input, stating number of input lines
+for line in range(N):  # Reading input line by line
+    function, arg = input().split()  # Splitting input lines in two
+    functions.append(function)  # Appending to empty lists
+    args.append(arg)
 
-N = int(input())
-
-for line in range(N):
-    function, arg = input().split()
-
-    if getattr(list1, function) == list1.get:
-        print(getattr(list1, function)(int(arg)))
-    else:
-        getattr(list1, function)(int(arg))
+print("\nOutput:")
+for function, arg in zip(functions, args):  # Looping through the lists
+    getattr(list1, function)(int(arg))  # Calling given class method with given argument
