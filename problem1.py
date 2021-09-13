@@ -77,28 +77,31 @@ class LinkedList:
         from LinkedList-class, and an integer x,
         makes a node with value x and pushes it to the middle of the list
         """
+        length = self.find_length()
         new_node = Node(value=x)
         if self.head is None:
             self.head = self.tail = new_node
-            self.head.previous = None
+            self.head.prev = None
             self.tail.next = None
 
         else:
-            length = self.find_length()
             mid = (length // 2) if (length % 2 == 0) else ((length + 1) // 2)
             current = self.head
             for i in range(1, mid):
                 current = current.next
 
             temp = current.next
-            temp.previous = current
+            temp.prev = current
 
             current.next = new_node
-            new_node.previous = current
+            new_node.prev = current
             new_node.next = temp
-            temp.previous = new_node
+            temp.prev = new_node
 
-        length += 1
+
+
+
+
 
     def get(self, i):
         """Method that takes in an integer i, representing an index,
@@ -130,7 +133,7 @@ print("\nOutput:")
 for function, arg in zip(functions, args):  # Looping through the lists
     getattr(list1, function)(int(arg))  # Calling given class method with given argument
 
-
+#list1.listprint()
 """
 Terminal > python3 problem1.py
 Input:
