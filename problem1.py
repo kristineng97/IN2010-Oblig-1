@@ -99,10 +99,6 @@ class LinkedList:
             temp.prev = new_node
 
 
-
-
-
-
     def get(self, i):
         """Method that takes in an integer i, representing an index,
         and prints the value of the node at this given index
@@ -114,26 +110,26 @@ class LinkedList:
             count += 1
         print(current.value)
 
+if __name__ == "__main__":
+    list1 = LinkedList()  # Make object of LinkedList class
 
-list1 = LinkedList()  # Make object of LinkedList class
+    # Lists to fill with given input, method and argument
+    functions = []
+    args = []
 
-# Lists to fill with given input, method and argument
-functions = []
-args = []
+    print("Input:")
 
-print("Input:")
+    N = int(input())  # Reading first line of input, stating number of input lines
+    for line in range(N):  # Reading input line by line
+        function, arg = input().split()  # Splitting input lines in two
+        functions.append(function)  # Appending to empty lists
+        args.append(arg)
 
-N = int(input())  # Reading first line of input, stating number of input lines
-for line in range(N):  # Reading input line by line
-    function, arg = input().split()  # Splitting input lines in two
-    functions.append(function)  # Appending to empty lists
-    args.append(arg)
+    print("\nOutput:")
+    for function, arg in zip(functions, args):  # Looping through the lists
+        getattr(list1, function)(int(arg))  # Calling given class method with given argument
 
-print("\nOutput:")
-for function, arg in zip(functions, args):  # Looping through the lists
-    getattr(list1, function)(int(arg))  # Calling given class method with given argument
 
-#list1.listprint()
 """
 Terminal > python3 problem1.py
 Input:
