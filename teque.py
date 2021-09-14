@@ -117,34 +117,18 @@ if __name__ == "__main__":
     functions = []
     args = []
 
-    print("Input:")
-
     N = int(input())  # Reading first line of input, stating number of input lines
     for line in range(N):  # Reading input line by line
         function, arg = input().split()  # Splitting input lines in two
         functions.append(function)  # Appending to empty lists
         args.append(arg)
 
-    print("\nOutput:")
     for function, arg in zip(functions, args):  # Looping through the lists
         getattr(list1, function)(int(arg))  # Calling given class method with given argument
 
 
 """
-Terminal > python3 problem1.py
-Input:
-9
-push_back 9
-push_front 3
-push_middle 5
-get 0
-get 1
-get 2
-push_middle 1
-get 1
-get 2
-
-Output:
+Terminal > python3 teque.py < eksempel_input_problem1
 3
 5
 9
