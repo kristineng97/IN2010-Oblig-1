@@ -23,7 +23,7 @@ def balance_array(arr: List[int]):
 
 
 def balance_heap(heap):
-    """Orders an array such that it will be a heap.
+    """Orders a heap such that it will be a balanced binary tree if inserted.
     """
 
     if len(heap) <= 2:
