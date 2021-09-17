@@ -1,137 +1,96 @@
+"""Triple ended queue implementation, with lists as the back-end data structure.
 """
-Problem 1: Teque
-"""
 
+class Teque:
+    def __init__(self, capacity):
+        self.left_list = [None] * (capacity + 1)
+        self.right_list = [None] * (capacity + 1)
 
-class Node:
-    """
-    Node class used as building block for linked list
-    """
+        self.front_ind = capacity // 2
+        self.middle_front_ind = capacity // 2 + 1
+        self.middle_back_ind = capacity // 2 - 1
+        self.back_ind = capacity // 2
 
-    def __init__(self, value):
-        self.value = value
-        self.next = None
-        self.prev = None
+    @property
+    def left_len(self):
+        return self.middle_front_ind - self.front_ind - 1
 
+    @property
+    def right_len(self):
+        return self.back_ind - self.middle_back_ind - 1
 
-class LinkedList:
-    """
-    Class for representing a linked list, with different methods
-    """
+    def __len__(self):
+        return self.left_len + self.right_len
 
-    def __init__(self):
-        self.head = None
-
-    def listprint(self):
-        """Method that prints the linked list"""
-        printval = self.head
-        while printval is not None:
-            print(printval.value)
-            printval = printval.next
-
-    def find_length(self):
-        """Method that finds the length of linked list"""
-        length = 0
-        temp = self.head
-        while temp != None:
-            length += 1
-            temp = temp.next
-        return length
-
-    def push_back(self, x):
-        """Method that takes in a list-object
-        from LinkedList-class, and an integer x,
-        makes a node with value x and pushes it to the back of the list
-        """
-        new_node = Node(value=x)
-        tail = self.head
-        new_node.next = None
-
-        if self.head is None:
-            new_node.prev = None
-            self.head = new_node
-            return
-
-        while tail.next is not None:
-            tail = tail.next
-
-        tail.next = new_node
-        new_node.prev = tail
-
-    def push_front(self, x):
-        """Method that takes in a list-object
-        from LinkedList-class, and an integer x,
-        makes a node with value x and pushes it to the front of the list
-        """
-        new_node = Node(value=x)
-        new_node.next = self.head
-        new_node.prev = None
-
-        if self.head is not None:
-            self.head.prev = new_node
-
-        self.head = new_node
-
-    def push_middle(self, x):
-        """Method that takes in a list-object
-        from LinkedList-class, and an integer x,
-        makes a node with value x and pushes it to the middle of the list
-        """
-        length = self.find_length()
-        new_node = Node(value=x)
-        if self.head is None:
-            self.head = self.tail = new_node
-            self.head.prev = None
-            self.tail.next = None
-
+    def __getitem__(self, i):
+        if self.left_len > i:
+            return self.left_list[self.front_ind + 1 + i]
         else:
-            mid = (length // 2) if (length % 2 == 0) else ((length + 1) // 2)
-            current = self.head
-            for i in range(1, mid):
-                current = current.next
-
-            temp = current.next
-            temp.prev = current
-
-            current.next = new_node
-            new_node.prev = current
-            new_node.next = temp
-            temp.prev = new_node
-
+            return self.right_list[self.middle_back_ind + 1 + i - self.left_len]
 
     def get(self, i):
-        """Method that takes in an integer i, representing an index,
-        and prints the value of the node at this given index
-        """
-        count = 0
-        current = self.head
-        while count != i:
-            current = current.next
-            count += 1
-        print(current.value)
+        print(self[i])
+
+    def push_front(self, value):
+        self.left_list[self.front_ind] = value
+        self.front_ind -= 1
+
+        if len(self) % 2 == 0:
+            self.shift_middle("left")
+
+    def push_middle(self, value):
+        self.left_list[self.middle_front_ind] = value
+        self.middle_front_ind += 1
+
+        if len(self) % 2 == 0:
+            self.shift_middle("left")
+
+    def push_back(self, value):
+        self.right_list[self.back_ind] = value
+        self.back_ind += 1
+
+        if len(self) % 2 == 1:
+            self.shift_middle("right")
+
+    def shift_middle(self, direction):
+        """Rebalance the lists by moving the middle element from one list to the other"""
+
+        if direction == "left":
+            if self.left_list[self.middle_front_ind] is None:
+                self.right_list[self.middle_back_ind] = self.left_list[self.middle_front_ind - 1] 
+                self.left_list[self.middle_front_ind - 1] = None
+            else:
+                self.right_list[self.middle_back_ind] = self.left_list[self.middle_front_ind] 
+            
+            self.middle_front_ind -= 1
+            self.middle_back_ind -= 1
+
+        elif direction == "right":
+            if self.right_list[self.middle_back_ind] is None:
+                self.left_list[self.middle_front_ind] = self.right_list[self.middle_back_ind + 1]
+                self.right_list[self.middle_back_ind + 1] = None
+            else:
+                self.left_list[self.middle_front_ind] = self.right_list[self.middle_back_ind]
+            
+            self.middle_front_ind += 1
+            self.middle_back_ind += 1
+
+    def __str__(self):
+        """Print out list, with the left part marked in red. Mainly for debugging"""
+        left = self.left_list[self.front_ind+1:self.middle_front_ind]
+        right = self.right_list[self.middle_back_ind+1:self.back_ind]
+        print_list = [f"\033[91m{i}: {elem}\033[0m" for i, elem in enumerate(left)]
+        print_list += [f"{i + self.left_len}: {elem}" for i, elem in enumerate(right)]
+
+        return "\n".join(print_list)
+
+def main():
+    N = int(input())
+    teque = Teque(N)
+
+    for _ in range(N):
+        function, arg = input().split()
+        getattr(teque, function)(int(arg))
 
 if __name__ == "__main__":
-    list1 = LinkedList()  # Make object of LinkedList class
-
-    # Lists to fill with given input, method and argument
-    functions = []
-    args = []
-
-    N = int(input())  # Reading first line of input, stating number of input lines
-    for line in range(N):  # Reading input line by line
-        function, arg = input().split()  # Splitting input lines in two
-        functions.append(function)  # Appending to empty lists
-        args.append(arg)
-
-    for function, arg in zip(functions, args):  # Looping through the lists
-        getattr(list1, function)(int(arg))  # Calling given class method with given argument
-
-
-"""
-Terminal > python3 teque.py < eksempel_input_problem1
-3
-5
-9
-5
-1
-"""
+    main()
